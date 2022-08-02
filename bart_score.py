@@ -61,7 +61,13 @@ class BARTScorer:
                         attention_mask=src_mask,
                         labels=tgt_tokens
                     )
+                    # output.logits is a 3-dimensional array with dimensions
+                    #     batch_size x max(len(generated_text)) x vocab size
+                    # View operation will make logits a two dimensional array
+                    # with dimensions: 
+                    #    (batch_size x max(len(generated_text))) x vocab_size
                     logits = output.logits.view(-1, self.model.config.vocab_size)
+                    # `lsm` normalizes the logits tokenwise for each sequence in the batch
                     loss = self.loss_fct(self.lsm(logits), tgt_tokens.view(-1))
                     loss = loss.view(tgt_tokens.shape[0], -1)
                     loss = loss.sum(dim=1) / tgt_len

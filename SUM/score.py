@@ -420,6 +420,7 @@ class Scorer:
                                     f'{name}_ref_hypo_en_{prompt}': ref_hypo_en[counter],
                                     f'{name}_avg_f_en_{prompt}': avg_f_en[counter],
                                     f'{name}_harm_f_en_{prompt}': harm_f_en[counter],
+                                    
                                     f'{name}_hypo_ref_de_{prompt}': hypo_ref_de[counter],
                                     f'{name}_ref_hypo_de_{prompt}': ref_hypo_de[counter],
                                     f'{name}_avg_f_de_{prompt}': avg_f_de[counter],
