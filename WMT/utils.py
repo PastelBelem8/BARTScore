@@ -1,11 +1,13 @@
 import os
 import pickle
 import sys
+import json
 
 import nltk
 from mosestokenizer import *
 from nltk import word_tokenize
 from nltk.tokenize import sent_tokenize
+
 
 nltk.download('stopwords')
 detokenizer = MosesDetokenizer('en')
@@ -80,3 +82,19 @@ def blockPrint():
 # Restore print
 def enablePrint():
     sys.stdout = sys.__stdout__
+
+
+def load_configs(filepath: str) -> dict:
+    if filepath:
+        with open(filepath, mode="r", encoding="utf-8") as f:
+            return json.load(f)
+    else:
+        return {}
+
+def parse_configs(configs: dict) -> dict:
+    configs = {} if configs is None else configs
+
+    results = {}
+    for metric_name, metric_hparams in configs.items():        
+        results[metric_name] = [(metric_name, h) for h in metric_hparams]
+    return results

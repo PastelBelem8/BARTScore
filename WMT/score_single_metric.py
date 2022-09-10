@@ -2,7 +2,6 @@ import argparse
 import time
 import numpy as np
 from utils import *
-from ..utils import load_configs, parse_configs
 from tqdm import tqdm
 
 REF_HYPO = read_file_to_list('files/tiny_ref_hypo_prompt.txt')
@@ -344,11 +343,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-"""
-python score.py --file kk-en/data.pkl --device cuda:0 --output kk-en/scores.pkl --bleu --chrf --bleurt --prism --comet --bert_score --bart_score --bart_score_cnn --bart_score_para
-
-python score.py --file lt-en/scores.pkl --device cuda:3 --output lt-en/scores.pkl --bart_score --bart_score_cnn --bart_score_para
-"""
-
-# python score_single_metric.py --bert_score --config-file /home/kat/Projects/PhD/BARTScore/SUM/metrics-config.json --file /home/kat/Projects/PhD/BARTScore/SUM/REALSumm/data.pkl --output /home/kat/Projects/PhD/BARTScore/SUM/REALSumm/bert-scores.pkl
