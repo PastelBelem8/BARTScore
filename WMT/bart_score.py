@@ -19,9 +19,9 @@ class BARTScorer:
         self.loss_fct = nn.NLLLoss(reduction='none', ignore_index=self.model.config.pad_token_id)
         self.lsm = nn.LogSoftmax(dim=1)
 
-    def load(self):
+    def load(self, path="models/bart.pth"):
         """ Load model from paraphrase finetuning """
-        self.model.load_state_dict(torch.load('models/bart.pth', map_location=self.device))
+        self.model.load_state_dict(torch.load(path, map_location=self.device))
 
     def score(self, srcs, tgts, batch_size):
         """ Score a batch of examples """
