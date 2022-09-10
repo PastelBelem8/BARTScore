@@ -12,6 +12,7 @@ from random import choices
 import os
 import sys
 import re
+import json
 from collections import defaultdict as ddict
 from scipy.stats import pearsonr, spearmanr, kendalltau
 
@@ -273,3 +274,19 @@ def get_predictions_br(system_pairs, systems, metric):
         else:
             preds[pair] = 2  # can't say
     return preds
+
+
+def load_configs(filepath: str) -> dict:
+    if filepath:
+        with open(filepath, mode="r", encoding="utf-8") as f:
+            return json.load(f)
+    else:
+        return {}
+
+def parse_configs(configs: dict) -> dict:
+    configs = {} if configs is None else configs
+
+    results = {}
+    for metric_name, metric_hparams in configs.items():        
+        results[metric_name] = [(metric_name, h) for h in metric_hparams]
+    return results

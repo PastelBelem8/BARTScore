@@ -2,10 +2,9 @@ import argparse
 import os
 import time
 import numpy as np
-import json
 import traceback
 from tqdm import tqdm
-
+from ..utils import load_configs
 from utils import *
 
 SRC_HYPO = read_file_to_list('/home/kat/Projects/PhD/BARTScore/SUM/files/src_hypo_prompt.txt')
@@ -74,9 +73,8 @@ class Scorer:
 
                 # Note, we assume that the metric name will be
                 # (bert_score, model_type)
-                model_type = metric_name[1]
-                kwargs = {} if isinstance(metric_name, str) else {"model_type": model_type}
-                 
+                kwargs = {} if isinstance(metric_name, str) else {"model_type": metric_name[1]}
+                model_type = kwargs["model_type"] if kwargs else ""
                 try:
                     # Set up BERTScore
                     bert_scorer = BERTScorer(
@@ -121,7 +119,7 @@ class Scorer:
                                 f'bert_score_{model_type}_f': F[counter]
                             })
                             counter += 1
-                    print(f'Finished calculating BERTScore ({model_type}), time passed {round(time.time() - start, 2)}s.')
+                    print(f'Finished calculating BERTScore ({metric_name}), time passed {round(time.time() - start, 2)}s.')
                 except:
                     print(f"Error with {metric_name}")
                     traceback.print_exc()
@@ -485,13 +483,9 @@ def main():
                              'bart_cnn_ref, bart_para_src, bart_para_ref')
     parser.add_argument('--config-file', type=str, default=None,
                         help='Name of the file with additional configurations for the metrics.')
-    args = parser.parse_args()
-
-    configs = {}
-    if args.config_file:
-        with open(args.config_file, mode="r", encoding="utf-8") as f:
-            configs = json.load(f)
     
+    args = parser.parse_args()
+    configs = load_configs(args.config_file)
     scorer = Scorer(args.file, args.device, args.multi_ref)
 
     METRICS = []
